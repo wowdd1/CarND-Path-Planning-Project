@@ -1,0 +1,25 @@
+how to generating path
+
+1. if the car just star, then generating a init path to XY points
+
+2. if previous XY points size less than PATH_SIZE_CUTOFF(10), then:
+
+  2.1. use BehaviorPlanner generating a behavior
+
+      keypoint: the sensor fusion data is be used here, the car konw other cars's position and speed,
+                so it can computing which behavior(Turn Left, Turn Right, Keep Lane) is best for current position,
+                then return the lowest cost behavior
+
+  2.2. use Trajectory generating trajectory in the s-d frame for next TRAVERSE_TIME(2.0)
+
+      keypoint: use s-d frame for simple computing trajectory, use the behavior for computing the target d,
+                use car speed, current postion and TRAVERSE_TIME computing target s,
+                use JMT for computing lowest Jerk trajectory
+
+  2.3. use pathConverter convert this trajectory in the s-d frame to XY points
+
+      keypoint: highway map data([x,y,s,dx,dy]) and spline
+
+  2.4. append the XY points to the previous XY points
+
+3. send the XY points to simulator
